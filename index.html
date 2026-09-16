@@ -7,7 +7,7 @@
     <style>
         :root {
             --primary-color: #0f172a;
-            --accent-color: #16a34a; /* Verde sportiv/fotbal */
+            --accent-color: #16a34a;
             --accent-hover: #15803d;
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
@@ -120,7 +120,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 30px;
         }
-        /* Stiluri pentru Galerie / Screenshot-uri */
+        /* Stiluri Galerie și Zoom la click */
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -133,10 +133,41 @@
             border-radius: 8px;
             border: 1px solid var(--border-color);
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
         }
         .gallery img:hover {
             transform: scale(1.02);
+            opacity: 0.95;
+        }
+        /* Fereastra Modal pentru mărire poză */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
         }
         @media (max-width: 768px) {
             .grid { grid-template-columns: 1fr; }
@@ -159,14 +190,12 @@
         <h1>Bogdanu Forecast</h1>
         <p>Instrumentul tău avansat de analiză și estimare statistică pentru fotbal.</p>
         <div class="cta-box">
-            <!-- Înlocuiește linkurile când ai linkul de download și plată -->
             <a href="#" class="btn btn-secondary">Descarcă Trial (Gratuit)</a>
             <a href="#" class="btn btn-primary">Cumpără Licența Master</a>
         </div>
     </header>
 
     <div class="container">
-        <!-- Card Prezentare & Funcționalități -->
         <div class="card">
             <h2>Despre Aplicație</h2>
             <p><strong>Bogdanu Forecast</strong> este o aplicație desktop puternică, dedicată analizei și estimării rezultatelor fotbalistice pe baza datelor istorice introduse manual din fișiere Excel sau CSV.</p>
@@ -198,22 +227,39 @@
             </div>
         </div>
 
-        <!-- Card Galerie Screenshot-uri -->
         <div class="card">
             <h2>Previzualizare Interfață</h2>
-            <p>Aruncă o privire asupra modului în care arată aplicația în acțiune:</p>
+            <p>Click pe oricare dintre imagini pentru a le mări:</p>
             <div class="gallery">
-                <!-- Asigură-te că ai imaginile screen1.png, screen2.png, screen3.png în repository -->
-                <img src="screen1.png" alt="Bogdanu Forecast - Ecran principal" onerror="this.style.display='none'">
-                <img src="screen2.png" alt="Bogdanu Forecast - Grafice și analize" onerror="this.style.display='none'">
-                <img src="screen3.png" alt="Bogdanu Forecast - Rezumat narativ" onerror="this.style.display='none'">
-           
+                <img src="screen1.png" alt="Bogdanu Forecast - Ecran principal" onclick="openModal(this.src)" onerror="this.style.display='none'">
+                <img src="screen2.png" alt="Bogdanu Forecast - Grafice și analize" onclick="openModal(this.src)" onerror="this.style.display='none'">
+                <img src="screen3.png" alt="Bogdanu Forecast - Rezumat narativ" onclick="openModal(this.src)" onerror="this.style.display='none'">
+            </div>
+            <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 15px; text-align: center;">*Imaginile se măresc instant la un simplu click.</p>
 
             <div class="disclaimer">
                 <strong>Notă importantă:</strong> Bogdanu Forecast este conceput ca un instrument de analiză și estimare statistică. Rezultatele oferă probabilități și scenarii calculate pe baza datelor disponibile, fără a reprezenta garanții certe asupra rezultatului unui meci.
             </div>
         </div>
     </div>
+
+    <!-- Fereastra Modal pentru Zoom -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="modal-close">&times;</span>
+        <img id="modalImg" src="">
+    </div>
+
+    <script>
+        function openModal(src) {
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImg");
+            modal.style.display = "flex";
+            modalImg.src = src;
+        }
+        function closeModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+    </script>
 
 </body>
 </html>
