@@ -1,257 +1,77 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bogdanu Forecast - Analiză și Estimare Statistică pentru Fotbal</title>
-    <style>
-        :root {
-            --primary-color: #0f172a;
-            --accent-color: #16a34a;
-            --accent-hover: #15803d;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #334155;
-            --border-color: #e2e8f0;
-        }
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: white;
-            text-align: center;
-            padding: 4rem 1rem;
-            border-bottom: 4px solid var(--accent-color);
-        }
-        header h1 {
-            margin: 0 0 10px 0;
-            font-size: 3rem;
-            color: #ffffff;
-            letter-spacing: -1px;
-        }
-        header p {
-            font-size: 1.25rem;
-            color: #94a3b8;
-            max-width: 700px;
-            margin: 0 auto 2.5rem auto;
-        }
-        .container {
-            max-width: 1000px;
-            margin: -40px auto 40px auto;
-            padding: 0 20px;
-        }
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            padding: 40px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
-        }
-        .cta-box {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-        .btn {
-            display: inline-block;
-            padding: 14px 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        .btn-primary {
-            background-color: var(--accent-color);
-            color: white;
-        }
-        .btn-primary:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-2px);
-        }
-        .btn-secondary {
-            background-color: #ffffff;
-            color: #0f172a;
-            border: 2px solid #cbd5e1;
-        }
-        .btn-secondary:hover {
-            background-color: #f1f5f9;
-            transform: translateY(-2px);
-        }
-        .trial-box {
-            background: #1e293b;
-            color: #e2e8f0;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin: 25px auto 0 auto;
-            max-width: 700px;
-            text-align: center;
-            border: 1px dashed #475569;
-        }
-        .trial-code {
-            display: inline-block;
-            background: #0f172a;
-            color: #4ade80;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            word-break: break-all;
-            margin-top: 8px;
-            border: 1px solid #334155;
-        }
-        h2 {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 12px;
-            margin-top: 0;
-            font-size: 1.75rem;
-        }
-        h3 {
-            color: var(--primary-color);
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        ul li {
-            padding: 8px 0;
-            position: relative;
-            padding-left: 28px;
-        }
-        ul li::before {
-            content: "✔";
-            position: absolute;
-            left: 0;
-            color: var(--accent-color);
-            font-weight: bold;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .gallery a {
-            display: block;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .gallery a:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-        }
-        .gallery img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
-            header h1 { font-size: 2.2rem; }
-        }
-        .disclaimer {
-            font-size: 0.9rem;
-            color: #64748b;
-            background: #f1f5f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
-            border-left: 4px solid #0f172a;
-        }
-    </style>
-</head>
-<body>
+import base64
+import json
+import hmac
+import hashlib
+import sys
 
-    <header>
-        <h1>Bogdanu Forecast</h1>
-        <p>Instrumentul tău avansat de analiză și estimare statistică pentru fotbal.</p>
-        <div class="cta-box">
-            <a href="https://github.com/Bogdanu1/Bogdanu-forecast/releases/download/v1.0.0/Forecast.exe" class="btn btn-secondary">Descarcă Trial (Gratuit)</a>
-            <a href="#" class="btn btn-primary">Cumpără Licența Master</a>
-        </div>
+# Secretul tău criptografic (păstrează-l în siguranță în aplicație)
+SECRET_KEY = b"bogdanu_secret_key_2026"
 
-        <div class="trial-box">
-            <span style="font-size: 0.95rem;">🔑 Folosește acest cod la prima pornire a aplicației pentru a activa perioada de încercare:</span><br>
-            <div class="trial-code">TRIAL-eyJwcm9kdWN0IjoiQm9nZGFudUZvcmVjYXN0Iiwia2luZCI6IlRSSUFMIiwibm9uY2UiOiI1ZGVjMzU5NjI0MTYiLCJzaWduYXR1cmUiOiIxZmI4Y2Y4NWMxY2VhMGQ5NzlhYzZhMjAifQ</div>
-        </div>
-    </header>
+def make_code(kind="MASTER"):
+    """Generează o cheie de licență offline unică bazată pe semnătură HMAC."""
+    import os
+    nonce = os.urandom(6).hex()
+    payload = {
+        "product": "BogdanuForecast",
+        "kind": kind,
+        "nonce": nonce
+    }
+    payload_json = json.dumps(payload, separators=(',', ':'))
+    payload_b64 = base64.urlsafe_b64encode(payload_json.encode()).decode().rstrip("=")
+    
+    signature = hmac.new(SECRET_KEY, payload_b64.encode(), hashlib.sha256).hexdigest()[:24]
+    return f"{kind}-{payload_b64}.{signature}"
 
-    <div class="container">
-        <!-- Card Prezentare & Funcționalități -->
-        <div class="card">
-            <h2>Despre Aplicație</h2>
-            <p><strong>Bogdanu Forecast</strong> este o aplicație desktop puternică, dedicată analizei și estimării rezultatelor fotbalistice pe baza datelor istorice introduse manual din fișiere Excel sau CSV.</p>
-            <p>Fișierul Excel se descarcă de pe site-ul <strong>football-data.co.uk</strong> și nu sunt responsabil de calitatea datelor. Fișierul Excel îl puteți face și manual respectând aceleași capete de tabel ca în fișierul de la adresa menționată.</p>
-            <p>Aplicația permite selectarea ligii și a echipelor, generând o predicție completă pentru meciul ales prin indicatori statistici avansați, distribuții de goluri și probabilități calculate pentru fiecare scenariu în parte.</p>
+def verify_code(code):
+    """Validează matematic cheia de licență local, fără internet."""
+    try:
+        parts = code.split("-", 1)
+        if len(parts) != 2:
+            return False, "Format invalid"
+        
+        kind, rest = parts
+        if "." not in rest:
+            return False, "Structură invalidă"
+            
+        payload_b64, signature = rest.rsplit(".", 1)
+        
+        # Recalculează semnătura pentru a verifica integritatea
+        expected_sig = hmac.new(SECRET_KEY, payload_b64.encode(), hashlib.sha256).hexdigest()[:24]
+        if not hmac.compare_digest(signature, expected_sig):
+            return False, "Semnătură criptografică invalidă"
+            
+        # Decodare payload
+        padding = '=' * (-len(payload_b64) % 4)
+        payload_json = base64.urlsafe_b64decode(payload_b64 + padding).decode()
+        data = json.loads(payload_json)
+        
+        if data.get("product") != "BogdanuForecast":
+            return False, "Produs nerecunoscut"
+            
+        return True, data.get("kind")
+    except Exception as e:
+        return False, f- "Eroare de validare: {e}"
 
-            <div class="grid" style="margin-top: 35px;">
-                <div>
-                    <h3>Funcționalități Principale</h3>
-                    <ul>
-                        <li>Încărcare simplă fișiere Excel și CSV</li>
-                        <li>Selectarea dinamică a ligilor</li>
-                        <li>Analiză detaliată gazdă / oaspete</li>
-                        <li>Predicții Over 1.5, Over 2.5 & BTTS</li>
-                        <li>Goluri estimate pe echipă & 1X2</li>
-                        <li>Șansă dublă & Scoruri exacte probabile</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>Rapoarte & Avantaje</h3>
-                    <ul>
-                        <li>Grafice vizuale de forecast</li>
-                        <li>Analiză de formă și clasament</li>
-                        <li>Recomandare principală pe goluri</li>
-                        <li>Nivel de siguranță (Sigură / Nesigură)</li>
-                        <li>Variantă estimată pentru cote 2-3</li>
-                        <li>Tab Text cu rezumat narativ complet</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+def main():
+    print("==================================================")
+    print("        Bogdanu's Soccer Forecast                  ")
+    print("==================================================")
+    
+    # Aici poți rula logica principală a aplicației tale sau interfața de verificare
+    cod_introdus = input("Introdu cheia de licență (sau apasă Enter pentru Trial): ").strip()
+    
+    if not cod_introdus:
+        print("\n[Info] Rulează în modul Trial (7 zile / limitat).")
+    else:
+        valabil, mesaj = verify_code(cod_introdus)
+        if valabil:
+            print(f"\n[Succes] Licență validată cu succes! Tip: {mesaj}")
+        else:
+            print(f"\n[Eroare] Licență invalidă: {mesaj}")
+            print("Pentru achiziționarea unei licențe Full, te rog să mă contactezi la:")
+            print("E-mail: bogdan_bogdan70@yahoo.com")
+            
+    input("\nApasă Enter pentru închidere...")
 
-        <!-- Card Galerie Screenshot-uri -->
-        <div class="card">
-            <h2>Previzualizare Interfață</h2>
-            <p>Click pe oricare dintre imagini pentru a o deschide la dimensiune completă într-o filă nouă:</p>
-            <div class="gallery">
-                <a href="screen1.png" target="_blank">
-                    <img src="screen1.png" alt="Bogdanu Forecast - Ecran principal" onerror="this.parentElement.style.display='none'">
-                </a>
-                <a href="screen2.png" target="_blank">
-                    <img src="screen2.png" alt="Bogdanu Forecast - Grafice și analize" onerror="this.parentElement.style.display='none'">
-                </a>
-                <a href="screen3.png" target="_blank">
-                    <img src="screen3.png" alt="Bogdanu Forecast - Rezumat narativ" onerror="this.parentElement.style.display='none'">
-                </a>
-            </div>
-            <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 15px; text-align: center;">*Imaginile se vor mări instant la click.</p>
-
-            <div class="disclaimer">
-                <strong>Notă importantă:</strong> Bogdanu Forecast este conceput ca un instrument de analiză și estimare statistică. Rezultatele oferă probabilități și scenarii calculate pe baza datelor disponibile, fără a reprezenta garanții certe asupra rezultatului unui meci.
-            </div>
-        </div>
-    </div>
-
-</body>
-</html>
+if __name__ == "__main__":
+    main()
