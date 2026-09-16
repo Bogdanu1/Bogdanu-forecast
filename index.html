@@ -72,14 +72,6 @@
             text-align: center;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        .btn-primary {
-            background-color: var(--accent-color);
-            color: white;
-        }
-        .btn-primary:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-2px);
-        }
         .btn-secondary {
             background-color: #ffffff;
             color: #0f172a;
@@ -110,6 +102,27 @@
             word-break: break-all;
             margin-top: 8px;
             border: 1px solid #334155;
+        }
+        .purchase-info {
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .purchase-info p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text-color);
+        }
+        .purchase-info a {
+            color: var(--accent-color);
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .purchase-info a:hover {
+            text-decoration: underline;
         }
         h2 {
             color: var(--primary-color);
@@ -187,7 +200,10 @@
         <p>Instrumentul tău avansat de analiză și estimare statistică pentru fotbal.</p>
         <div class="cta-box">
             <a href="https://github.com/Bogdanu1/Bogdanu-forecast/releases/download/v1.0.0/Forecast.exe" class="btn btn-secondary">Descarcă Trial (Gratuit)</a>
-            <a href="#" class="btn btn-primary">Cumpără Licența Master</a>
+        </div>
+
+        <div class="purchase-info">
+            <p><strong>Pentru achiziționarea licenței Full:</strong> Te rog să mă contactezi direct la <a href="mailto:bogdan_bogdan70@yahoo.com">bogdan_bogdan70@yahoo.com</a> pentru a primi cheia de activare.</p>
         </div>
 
         <div class="trial-box">
@@ -197,7 +213,6 @@
     </header>
 
     <div class="container">
-        <!-- Card Prezentare & Funcționalități -->
         <div class="card">
             <h2>Despre Aplicație</h2>
             <p><strong>Bogdanu Forecast</strong> este o aplicație desktop puternică, dedicată analizei și estimării rezultatelor fotbalistice pe baza datelor istorice introduse manual din fișiere Excel sau CSV.</p>
@@ -230,7 +245,6 @@
             </div>
         </div>
 
-        <!-- Card Galerie Screenshot-uri -->
         <div class="card">
             <h2>Previzualizare Interfață</h2>
             <p>Click pe oricare dintre imagini pentru a o deschide la dimensiune completă într-o filă nouă:</p>
